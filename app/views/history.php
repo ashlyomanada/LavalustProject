@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>History</title>
     <link rel="stylesheet" href="public/styles/style.css" />
+    <link rel="stylesheet" href="public/styles/history.css" />
     <link
         href="https://fonts.googleapis.com/css2?family=Climate+Crisis&family=Poppins:wght@200;400;600&family=Roboto:ital,wght@0,100;0,300;1,100;1,300&display=swap"
         rel="stylesheet" />
@@ -36,40 +37,40 @@
     </nav>
 
     <div class="reserve-container section" id="history">
-        <table border="1">
-            <tr>
-                <th>Fullname</th>
-                <th>Email</th>
-                <th>Contact</th>
-                <th>Table</th>
-                <th>Address</th>
-                <th>Date</th>
-                <th>Status</th>
-            </tr>
-            <tbody>
-                <?php foreach($data as $datas): ?>
-                <tr>
-                    <td><?=$datas['fullname'] ?></td>
-                    <td><?=$datas['email'] ?></td>
-                    <td><?=$datas['contact'] ?></td>
-                    <td><?=$datas['continenteaTbl'] ?></td>
-                    <td><?=$datas['address'] ?></td>
-                    <td><?=$datas['date'] ?></td>
-                    <td><?=$datas['status'] ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+        <?php if (!empty($data)): ?>
+        <div class="status-container">
+            <?php foreach($data as $datas): ?>
+            <div class="history-status-container">
+                <div class="status-col">
+                    <p><i class="fa-solid fa-user"></i> <?=$datas['fullname'] ?></p>
+                    <p><i class="fa-solid fa-envelope"></i> <?=$datas['email'] ?></p>
+                    <p> <i class="fa-solid fa-address-book"></i> <?=$datas['contact'] ?></p>
+                    <p><i class="fa-solid fa-location-dot"></i> <?=$datas['address'] ?></p>
+                </div>
+                <div class="status-col">
+                    <p><i class="fa-regular fa-calendar-days"></i> <?=$datas['date'] ?></p>
+                    <div class="status-row">
+                        <p><i class="fa-solid fa-table"></i> <?=$datas['continenteaTbl'] ?></p>
+                        <p><i class="fa-solid fa-users"></i> People <?=$datas['noPeople'] ?></p>
+                    </div>
+                    <p><i class="fa-solid fa-calendar-check"></i> <?=$datas['status'] ?></p>
+                    <?php if ($datas['status'] !== 'Reserved'): ?>
+                    <a href="<?= site_url('/cancelStatus/'.$datas['id']) ?>" class="statusBtn">Cancel</a>
+                    <?php endif; ?>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <?php else: ?>
+        <h2>No Reserves Yet</h2>
+        <?php endif; ?>
+
+
+
     </div>
 </body>
 
 </html>
 <style>
-#history {
-    height: 100vh;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+
 </style>

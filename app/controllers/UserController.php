@@ -1,6 +1,5 @@
 <?php
 defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
-use Dompdf\Dompdf;
 //Import PHPMailer classes into the global namespace
 //These must be at the top of your script, not inside a function
 
@@ -25,65 +24,16 @@ class UserController extends Controller {
         return $this->call->view('userlogin');
     }
 
-    public function home(){
+    public function addMenu(){
         $this->call->library('upload');
         $data['errors'] = $this->upload->get_errors();
-        return $this->call->view('home',$data);
+        return $this->call->view('addMenu',$data);
     }
 
    
     public function website(){
-        return $this->call->view('website');
-    }
-
-    public function createPdf(){
-        $dompdf = new Dompdf();
-        $dompdf->loadHtml('hello world');
-        $dompdf->setPaper('A4', 'landscape');
-        $dompdf->render();
-        $dompdf->stream();
-    }
-    public function upload() {
-        // Check if the file is selected
-        if (isset($_FILES["userfile"])) {
-            // Load the upload library
-            $this->call->library('upload', $_FILES["userfile"]);
-    
-            // Configure upload settings
-            $this->upload
-                ->min_size(1)
-                ->set_dir('public')
-                ->allowed_extensions(array('jpg'))
-                ->allowed_mimes(array('image/jpeg'))
-                ->is_image()
-                ->encrypt_name();
-    
-            // Attempt to upload the file
-            if ($this->upload->do_upload()) {
-                // File uploaded successfully
-                $email = $this->io->post('email');
-                $data['filename'] = $this->upload->get_filename();
-    
-                // Send email with the uploaded file link
-                $this->call->library('email');
-                $this->email->sender('ashlyomanada@gmail.com', 'Ashly Omanada');
-                $this->email->recipient($email);
-                $this->email->subject('Inbox');
-                $this->email->email_content('<a href="' . site_url('public/' . $data['filename']) . '"><img src="' . site_url('public/' . $data['filename']) . '" alt="Image Description"></a>', 'html');
-                $this->email->send();
-    
-                // Load the home view with data
-                $this->call->view('welcome_page',$data);
-            } else {
-                // File upload failed, get errors and load the home view
-                $data['errors'] = $this->upload->get_errors();
-                $this->call->view('home', $data);
-            }
-        } else {
-            // No file selected, handle accordingly
-            $data['errors'][] = 'No file selected for upload.';
-            $this->call->view('home', $data);
-        }
+        $data = $this->User_model->showMenu();
+        return $this->call->view('website',$data);
     }
     
     public function signin(){
@@ -147,48 +97,55 @@ class UserController extends Controller {
     
 
     public function reserve(){
-
-        return $this->call->view('reserve');
+        $email =   $_SESSION['email'] ;
+        if(!empty($email)){
+            $data = $this->User_model->showUser($email);
+        $this->call->view('reserve', $data);
+        }
     }
 
     public function reserveInsert(){
-        $id = substr(md5(rand()), 0, 10);
-        $username = $this->io->post('username');
-        $email = $this->io->post('email');
-        $contact = $this->io->post('contact');
-        $table = $this->io->post('table');
-        $address = $this->io->post('address');
-        $date = $this->io->post('date');
-        if($this->form_validation->submitted()) {
-            $this->form_validation->name('username')->required()
-            ->name('email')->required()
-            ->name('contact')->required()
-            ->name('table')->required()
-            ->name('address')->required()
-            ->name('date')->required();
-            if($this->form_validation->run()){
-            $this->User_model->insertReserve($id, $username, $email,$contact,$table ,$address,$date);
-            return $this->call->view('reserve');
-            } else{
-                return $this->call->view('reserve');
+        $email =   $_SESSION['email'] ;
+        if(!empty($email)){
+            $data = $this->User_model->showUser($email);
+            $id = substr(md5(rand()), 0, 10);
+            $username = $this->io->post('username');
+            $email = $this->io->post('email');
+            $contact = $this->io->post('contact');
+            $table = $this->io->post('table');
+            $address = $this->io->post('address');
+            $date = $this->io->post('date');
+            $noPeople = $this->io->post('people');
+            if($this->form_validation->submitted()) {
+                $this->form_validation->name('username')->required()
+                ->name('email')->required()
+                ->name('contact')->required()
+                ->name('table')->required()
+                ->name('address')->required()
+                ->name('date')->required()
+                ->name('people')->required();
+                if($this->form_validation->run()){
+                $this->User_model->insertReserve($id, $username, $email,$contact,$table ,$address,$date,$noPeople);
+                redirect('/showHistory');
+                } else{
+                   
+                    return $this->call->view('reserve',$data);
+                }
             }
+            else{
+                return $this->call->view('reserve',$data);
+            }
+            
         }
-        else{
-            return $this->call->view('reserve');
-        }
+        
     }
 
     public function showHistory(){
         $email =   $_SESSION['email'] ;
         if(!empty($email)){
             $data = $this->User_model->show($email);
-        $this->call->view('history', $data);
+            $this->call->view('history', $data);
         }
-    }
-
-    public function admin(){
-        $data = $this->User_model->showHistory();
-        return $this->call->view('admin', $data);
     }
 
     public function logout(){
@@ -196,20 +153,103 @@ class UserController extends Controller {
         return $this->call->view('userlogin');
     }
 
-    public function update_data(){
-        $data = $this->User_model->show();
+    public function updateStatus($id){
+        $data = $this->User_model->showHistory();
         if($this->form_validation->submitted()) {
-            $this->form_validation->name('username')->required()->name('password')->required();
+            $this->form_validation->name('status')->required();
             if($this->form_validation->run()){
-                $this->User_model->adminUpdate($this->io->post('id'),$this->io->post('status'));
-                $this->call->view('admin', $data);
+                $this->User_model->adminUpdate($id,$this->io->post('status'));
+                redirect('admin',$data);
             }
             else{
-                $this->call->view('hello');
+                redirect('admin',$data);
             }
         }
-        $this->call->view('userview');
+        redirect('admin',$data);
     }
+
+    public function cancelStatus($id){
+        if($this->User_model->deleteHistory($id)){
+            $email =   $_SESSION['email'] ;
+            if(!empty($email)){
+                $data = $this->User_model->show($email);
+                redirect('/showHistory', $data);
+            }
+        }
+        
+    }
+
+    public function upload() {
+        if (isset($_FILES["userfile"])) {
+            $this->call->library('upload', $_FILES["userfile"]);
+            $this->upload
+                ->set_dir('public')
+                ->is_image()
+                ->encrypt_name();
+            if ($this->upload->do_upload()) {
+                $name = $this->io->post('name');
+                $price = $this->io->post('price');
+                $data['filename'] = $this->upload->get_filename();
+                $this->User_model->insertMenu($name,$price,$data['filename']);
+                redirect('/getMenu');
+            } else {
+                $data['errors'] = $this->upload->get_errors();
+                $this->call->view('home', $data);
+            }
+        } else {
+            $data['errors'][] = 'No file selected for upload.';
+            $this->call->view('home', $data);
+        }
+    }
+
+    public function uploadProduct() {
+        if (isset($_FILES["userfile"])) {
+            $this->call->library('upload', $_FILES["userfile"]);
+            $this->upload
+                ->set_dir('public')
+                ->is_image()
+                ->encrypt_name();
+            if ($this->upload->do_upload()) {
+                $name = $this->io->post('name');
+                $price = $this->io->post('price');
+                $data['filename'] = $this->upload->get_filename();
+                $this->User_model->insertProduct($name,$price,$data['filename']);
+                redirect('/getProduct');
+            } else {
+                $data['errors'] = $this->upload->get_errors();
+                $this->call->view('addProduct', $data);
+            }
+        } else {
+            $data['errors'][] = 'No file selected for upload.';
+            $this->call->view('addProduct', $data);
+        }
+    }
+  
+    public function updateMenu() {
+        $id = $this->io->post('id');
+        $name = $this->io->post('name');
+        $price = $this->io->post('price');
+        if(isset($_FILES["userfile"])){
+            $this->call->library('upload', $_FILES["userfile"]);
+            $this->upload
+                ->set_dir('public')
+                ->allowed_mimes(array('image/jpeg'))
+                ->is_image()
+                ->encrypt_name();
+            if($this->upload->do_upload()) {
+                $data['filename'] = $this->upload->get_filename();
+                $this->User_model->editMenu($id,$name,$price,$data['filename']  );
+                redirect('/getMenu');
+            } else {
+                redirect('/getMenu');
+            }
+        }
+        else{
+            redirect('/getMenu');
+        }
+		
+	}
+    
     /*
      $email = $this->io->post('email');
                 $this->User_model->isverified($email);

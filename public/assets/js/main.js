@@ -19,19 +19,3 @@ toggle.onclick = function () {
   navigation.classList.toggle("active");
   main.classList.toggle("active");
 };
-
-const details = document.querySelector("#details");
-const cardBox = document.querySelector("#cardBox");
-const btnCustomer = document.querySelector("#btn-customers");
-const btnDashboard = document.querySelector("#btn-dashboard");
-details.style.display = "none";
-
-btnDashboard.addEventListener("click", () => {
-  cardBox.style.display = "";
-  details.style.display = "none";
-});
-
-btnCustomer.addEventListener("click", () => {
-  details.style.display = "unset";
-  cardBox.style.display = "none";
-});

@@ -40,8 +40,7 @@
             <div class="home-descriptions-content">
                 <h1>CONTINENTEA</h1>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi,
-                    maiores!
+                    Elevate your tea experience with Continentea — where every sip tells a story.
                 </p>
                 <button class="button">RESERVE NOW</button>
             </div>
@@ -78,7 +77,23 @@
         <div class="menu-header-container">
             <h1>MENU</h1>
         </div>
-        <div class="menu-body-container"></div>
+        <div class="menu-body-container">
+            <?php foreach ($data as $datas):?>
+            <div class="menu-box-container">
+                <div class="menu-box-picture-container">
+                    <img class="menu-picture" src="public/<?= $datas['image'] ?>" alt="" />
+                </div>
+                <div class="menu-box-description-container">
+                    <div class="menu-box-description1">
+                        <h3><?= $datas['name'] ?></h3>
+                        <p><?= $datas['price'] ?></p>
+                    </div>
+                    <div class="menu-box-description2">
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 
     <div class="about-container section" id="about">
@@ -92,10 +107,10 @@
             <div class="about-description-container">
                 <h2>Best Milktea in the Country</h2>
                 <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime
-                    tenetur, perferendis neque eum, praesentium, similique expedita quos
-                    dolore velit sit quia officia possimus voluptas dignissimos fugiat
-                    rem consectetur quae omnis.
+                    Welcome to Continentea, where our love for tea knows no bounds. At Continentea, we are more than
+                    just connoisseurs of fine tea – we are storytellers, curators, and enthusiasts on a journey to
+                    redefine the tea experience. Our passion stems from a rich tapestry of cultures, flavors, and
+                    traditions, woven into every tea leaf.
                 </p>
                 <button class="button">LEARN MORE</button>
             </div>
@@ -115,7 +130,7 @@
                 <div class="footer-box">
                     <h3>LOCATION</h3>
                     <u>
-                        <li>Calapan City</li>
+                        <li>Tawiran, Calapan City</li>
                     </u>
                 </div>
             </div>
@@ -123,9 +138,9 @@
                 <div class="footer-box">
                     <h3>CONTACT INFO</h3>
                     <u>
-                        <li>09507335078</li>
-                        <li>ashlyomanada@gmail.com</li>
-                        <li>Ashly Omanada</li>
+                        <li>0954445507</li>
+                        <li>continentea@gmail.com</li>
+                        <li>Continentea</li>
                     </u>
                 </div>
             </div>
@@ -134,6 +149,8 @@
                     <h3>CREATED BY</h3>
                     <u>
                         <li>Ashly Omanada</li>
+                        <li>Karyle Ibon</li>
+                        <li>Jonel Imbang</li>
                     </u>
                 </div>
             </div>
@@ -150,7 +167,6 @@
             </div>
         </div>
     </footer>
-    <script src="public/scripts/render.js"></script>
     <script src="public/scripts/controls.js"></script>
     <script src="public/scripts/cart.js"></script>
 </body>

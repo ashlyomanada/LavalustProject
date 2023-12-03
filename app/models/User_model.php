@@ -15,7 +15,7 @@ class User_model extends Model {
 		$result = $this->db->table('userstable')->insert($data);
 	}
 
-	public function insertReserve($id, $username, $email,$contact,$table ,$address,$date) {
+	public function insertReserve($id, $username, $email,$contact,$table ,$address,$date,$noPeople) {
 		
 		$data = array(
 			'id' => $id,
@@ -25,6 +25,7 @@ class User_model extends Model {
 			'continenteaTbl' => $table,
 			'address' => $address,
 			'date' => $date,
+			'noPeople' => $noPeople,
 			'status' => 'Pending',
 		);
 
@@ -79,15 +80,118 @@ class User_model extends Model {
 	}
 
 	public function showHistory(){
-		return $this->db->raw('SELECT * FROM usershistory');
+		
+		return $this->db->table('usershistory')->order_by('date', 'ASC')->get_all();
+	}
+
+	public function showUser($email){
+		return $this->db->table('userstable')->where('email', $email)->get_all();
 	}
 
 	public function adminUpdate($id,$status){
         $data = array(
 			'status' => $status,
 		);
-		$result = $this->db->table('usershistory')->where(array('userid' => $id))->update($data);
+		$result = $this->db->table('usershistory')->where(array('id' => $id))->update($data);
+		if($result)
+		return true;
     }
+
+	public function deleteHistory($id){
+		$result = $this->db->table('usershistory')->where(array('id' => $id))->delete();
+	   if($result)
+		return true;
+	}
+	
+	public function insertMenu($name,$price,$image) {
+		$data = array(
+			'name' => $name,
+			'price' => $price,
+			'image' => $image,
+		);
+
+		$result = $this->db->table('menu')->insert($data);
+	}
+
+	public function insertProduct($name,$price,$image) {
+		$data = array(
+			'name' => $name,
+			'price' => $price,
+			'image' => $image,
+		);
+
+		$result = $this->db->table('product')->insert($data);
+	}
+	
+	public function showUsers(){
+		return $this->db->raw('SELECT * FROM usersTable');
+	}
+
+	public function showMenu(){
+		return $this->db->raw('SELECT * FROM menu');
+	}
+
+	public function showProduct(){
+		return $this->db->raw('SELECT * FROM product');
+	}
+
+	public function editMenu($id,$name,$price,$image){
+        $data = array(
+			'name' => $name,
+			'price' => $price,
+			'image' => $image,
+		);
+		$result = $this->db->table('menu')->where(array('id' => $id))->update($data);
+    }
+
+	public function deleteMenu($id) {
+		$result = $this->db->table('menu')->where(array('id' => $id))->delete();
+		if($result)
+		 return true;
+		
+	 }
+
+	 public function deleteProduct($id) {
+		$result = $this->db->table('product')->where(array('id' => $id))->delete();
+		if($result)
+		 return true;
+		
+	 }
+
+	 public function totalusers(){
+		return $this->db->table('usersTable')->select_count('userid', 'total_row')->get();
+	 }
+
+	 public function reserves(){
+		return $this->db->table('usershistory')->where("status", 'Reserved')->select_count('id', 'total_reserves')->get();
+	 }
+
+	 public function totalPending(){
+		return $this->db->table('usershistory')->where("status", 'Pending')->select_count('id', 'total_reserves')->get();
+	 }
+	 
+	 public function totalReserves(){
+		return $this->db->table('usershistory')->select_count('id', 'total_reserves')->get();
+	 }
+
+	 public function userUpdate($userid,$username,$email,$password){
+        $data = array(
+			'username' => $username,
+			'email' => $email,
+			'password' => $password,
+		);
+		$result = $this->db->table('userstable')->where(array('userid' => $userid))->update($data);
+		if($result)
+		return true;
+    }
+
+	public function deleteUser($id) {
+		$result = $this->db->table('userstable')->where(array('userid' => $id))->delete();
+		if($result)
+		 return true;
+		
+	 }
+	 
 	/*
 	public function show(){
 		return $this->db->raw('SELECT * FROM userstable');

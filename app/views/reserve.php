@@ -35,13 +35,18 @@
     </nav>
 
     <div class="reserve-container section" id="home">
+        <?php if(isset($error_message)) {?>
+        <h1><?= $error_message; ?></h1>
+        <?php }?>
+        <?php foreach($data as $datas): ?>
         <form class="form" action="<?= site_url('/reserveInsert'); ?>" method="post">
             <p class="form-title">Reserve Now</p>
             <div class="input-container">
-                <input type="text" placeholder="Enter Full Name" name="username" require>
+                <input type="text" placeholder="Enter Full Name" name="username" value="<?=$datas['username'] ?>"
+                    require>
                 <span>
                 </span>
-                <input type="email" placeholder="Enter email" name="email" require>
+                <input type="email" placeholder="Enter email" value="<?=$datas['email'] ?>" name="email" require>
                 <span>
                 </span>
             </div>
@@ -61,12 +66,15 @@
                 </span>
             </div>
             <div class="input-container">
-                <textarea name="address" id="address" cols="97" rows="4" placeholder="Address"></textarea>
+                <textarea name="address" id="address" cols="75" rows="4" placeholder="Address"></textarea>
                 <span>
                 </span>
             </div>
             <div class="input-container">
                 <input type="datetime-local" name="date" id="">
+                <span>
+                </span>
+                <input type="number" placeholder="No. People" name="people" min="1" require>
                 <span>
                 </span>
             </div>
@@ -75,6 +83,7 @@
             </button>
 
         </form>
+        <?php endforeach; ?>
     </div>
 </body>
 
@@ -90,12 +99,18 @@
 
 .form {
     background-color: #ecc1a1;
-    display: block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     padding: 1rem;
     height: 75%;
     max-width: 700px;
     border-radius: 0.5rem;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+textarea {
+    width: 100%;
 }
 
 .form-title {
@@ -159,6 +174,7 @@
     width: 100%;
     border-radius: 0.5rem;
     text-transform: uppercase;
+    border: none;
 }
 
 .signup-link {

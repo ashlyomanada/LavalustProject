@@ -15,21 +15,28 @@
 
 <body>
     <div class="container-fluid d-flex align-items-center justify-content-center flex-column"
-        style="height:100vh;width:100%;background:#e0e0e0;">
-        <form class="form" action="<?= site_url('/upload'); ?>" method="post" enctype="multipart/form-data">
-            <p class="form-title">Send An Attachment</p>
+        style="height:100vh;width:100%;background:#265073;">
+        <form class="form" action="<?= site_url('/uploadProduct'); ?>" method="post" enctype="multipart/form-data">
+            <p class="form-title">ADD PRODUCT</p>
             <div class="input-container">
-                <input type="email" placeholder="Enter email" name="email">
+                <input type="text" placeholder="Enter name" name="name" required>
                 <span>
                 </span>
             </div>
             <div class="input-container">
-                <input type="file" name="userfile" accept="image/jpeg, image/png" maxlength="2097152" />
+                <input type="number" placeholder="Enter price" name="price" required>
+                <span>
+                </span>
+            </div>
+            <div class="input-container">
+                <input type="file" name="userfile" accept="image/jpeg, image/png" maxlength="2097152" required />
             </div>
             <button type="submit" class="submit">
-                SEND
+                ADD
             </button>
-
+            <a href="<?= site_url('/getProduct'); ?>" class="submit">
+                Back
+            </a>
             <?php foreach($errors as $error): ?>
             <?= $error ?>
             <?php endforeach;?>
@@ -92,6 +99,8 @@
     width: 100%;
     border-radius: 0.5rem;
     text-transform: uppercase;
+    text-align: center;
+    text-decoration: none;
 }
 
 .signup-link {

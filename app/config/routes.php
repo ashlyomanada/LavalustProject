@@ -46,15 +46,33 @@ defined('PREVENT_DIRECT_ACCESS') OR exit('No direct script access allowed');
 
 $router->get('/', 'UserController::index');
 $router->get('/login', 'UserController::login');
-$router->get('/createPdf', 'UserController::createPdf');
 $router->match('/signup', 'UserController::signup','GET|POST');
 $router->match('/signin', 'UserController::signin','GET|POST');
 $router->match('/verify/(:any)', 'UserController::edit','GET|POST');
 $router->match('/upload', 'UserController::upload','GET|POST');
+$router->match('/uploadProduct', 'UserController::uploadProduct','GET|POST');
 $router->get('/reserve', 'UserController::reserve');
 $router->get('/website', 'UserController::website');
-$router->get('/home', 'UserController::home');
+$router->get('/addMenu', 'UserController::addMenu');
 $router->post('/reserveInsert', 'UserController::reserveInsert');
 $router->match('/showHistory', 'UserController::showHistory','GET|POST');
-$router->get('/admin', 'UserController::admin');
 $router->get('/logout', 'UserController::logout');
+$router->match('/updateStatus/(:any)', 'UserController::updateStatus','GET|POST');
+$router->match('/cancelStatus/(:any)', 'UserController::cancelStatus','GET|POST');
+$router->match('/uploadAdmin', 'UserController::uploadAdmin','GET|POST');
+$router->match('/updateMenu/(:any)', 'UserController::updateMenu','GET|POST');
+$router->match('/getId/(:any)', 'UserController::getId','GET|POST');
+//$router->get('/getCustomer','AdminController::getCustomer');
+
+$router->get('/getMenu','AdminController::getMenu');
+$router->get('/getProduct','AdminController::getProduct');
+$router->get('/admin', 'AdminController::admin');
+$router->get('/getDashboard','AdminController::getDashboard');
+$router->get('/getUsers','AdminController::getUsers');
+
+
+$router->match('/deleteMenu/(:any)', 'AdminController::deleteMenu','GET|POST');
+$router->match('/deleteProduct/(:any)', 'AdminController::deleteProduct','GET|POST');
+$router->get('/addProduct', 'AdminController::addProduct');
+$router->match('/updateUsers', 'AdminController::updateUsers','GET|POST');
+$router->match('/deleteUser/(:any)', 'AdminController::deleteUser','GET|POST');
