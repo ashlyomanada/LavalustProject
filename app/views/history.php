@@ -53,7 +53,11 @@
                         <p><i class="fa-solid fa-table"></i> <?=$datas['continenteaTbl'] ?></p>
                         <p><i class="fa-solid fa-users"></i> People <?=$datas['noPeople'] ?></p>
                     </div>
-                    <p><i class="fa-solid fa-calendar-check"></i> <?=$datas['status'] ?></p>
+                    <div class="status-row">
+                        <p><i class="fa-solid fa-calendar-check"></i> <?=$datas['status'] ?></p>
+                        <p><i class="fa-solid fa-mug-saucer"></i> <?=$datas['menu'] ?></p>
+                        <p><i class="fa-solid fa-mug-saucer"></i> <?=$datas['product'] ?></p>
+                    </div>
                     <?php if ($datas['status'] !== 'Reserved'): ?>
                     <a href="<?= site_url('/cancelStatus/'.$datas['id']) ?>" class="statusBtn">Cancel</a>
                     <?php endif; ?>

@@ -15,7 +15,7 @@ class User_model extends Model {
 		$result = $this->db->table('userstable')->insert($data);
 	}
 
-	public function insertReserve($id, $username, $email,$contact,$table ,$address,$date,$noPeople) {
+	public function insertReserve($id, $username, $email,$contact,$table,$menu,$product ,$address,$date,$noPeople) {
 		
 		$data = array(
 			'id' => $id,
@@ -23,6 +23,8 @@ class User_model extends Model {
 			'email' => $email,
 			'contact' => $contact,
 			'continenteaTbl' => $table,
+			'menu' => $menu,
+			'product' => $product,
 			'address' => $address,
 			'date' => $date,
 			'noPeople' => $noPeople,
@@ -191,6 +193,14 @@ class User_model extends Model {
 		 return true;
 		
 	 }
+
+	 public function verifyEmail($email){
+		$result = $this->db->table('userstable')->like('email', "%$email%")->get_all();
+		if($result)
+		 return true;
+	 }
+
+	 
 	 
 	/*
 	public function show(){

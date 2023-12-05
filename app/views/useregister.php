@@ -16,20 +16,23 @@
 <body>
     <div class="container-fluid d-flex align-items-center justify-content-center flex-column"
         style="height:100vh;width:100%;background:#e0e0e0;">
+        <?php if(isset($error_registered)) { ?>
+        <div class="alert alert-danger"><?= $error_registered?></div>
+        <?php } ?>
         <form class="form" action="<?= site_url('/signup'); ?>" method="post">
             <p class="form-title">Sign up</p>
             <div class="input-container">
-                <input type="text" placeholder="Enter username" name="username" require>
+                <input type="text" placeholder="Enter username" name="username" required>
                 <span>
                 </span>
             </div>
             <div class="input-container">
-                <input type="email" placeholder="Enter email" name="email" require>
+                <input type="email" placeholder="Enter email" name="email" required>
                 <span>
                 </span>
             </div>
             <div class="input-container">
-                <input type="password" placeholder="Enter password" name="password" require>
+                <input type="password" placeholder="Enter password" name="password" required>
             </div>
             <input type="hidden" name="verified" value="NO">
             <button type="submit" class="submit">

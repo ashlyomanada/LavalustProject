@@ -78,7 +78,7 @@
             <h1>MENU</h1>
         </div>
         <div class="menu-body-container">
-            <?php foreach ($data as $datas):?>
+            <?php foreach ($data['menu'] as $datas):?>
             <div class="menu-box-container">
                 <div class="menu-box-picture-container">
                     <img class="menu-picture" src="public/<?= $datas['image'] ?>" alt="" />
@@ -86,7 +86,7 @@
                 <div class="menu-box-description-container">
                     <div class="menu-box-description1">
                         <h3><?= $datas['name'] ?></h3>
-                        <p><?= $datas['price'] ?></p>
+                        <p><i class="fa-solid fa-peso-sign"></i> <?= $datas['price'] ?></p>
                     </div>
                     <div class="menu-box-description2">
                     </div>
@@ -121,7 +121,23 @@
         <div class="product-header-container">
             <h1>PRODUCTS</h1>
         </div>
-        <div class="product-body-container"></div>
+        <div class="product-body-container">
+            <?php foreach ($data['product'] as $datas):?>
+            <div class="menu-box-container">
+                <div class="menu-box-picture-container">
+                    <img class="menu-picture" src="public/<?= $datas['image'] ?>" alt="" />
+                </div>
+                <div class="menu-box-description-container">
+                    <div class="menu-box-description1">
+                        <h3><?= $datas['name'] ?></h3>
+                        <p><i class="fa-solid fa-peso-sign"> </i><?= $datas['price'] ?></p>
+                    </div>
+                    <div class="menu-box-description2">
+                    </div>
+                </div>
+            </div>
+            <?php endforeach; ?>
+        </div>
     </div>
 
     <footer>

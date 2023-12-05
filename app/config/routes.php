@@ -60,7 +60,7 @@ $router->get('/logout', 'UserController::logout');
 $router->match('/updateStatus/(:any)', 'UserController::updateStatus','GET|POST');
 $router->match('/cancelStatus/(:any)', 'UserController::cancelStatus','GET|POST');
 $router->match('/uploadAdmin', 'UserController::uploadAdmin','GET|POST');
-$router->match('/updateMenu/(:any)', 'UserController::updateMenu','GET|POST');
+$router->match('/updateMenu', 'UserController::updateMenu','GET|POST');
 $router->match('/getId/(:any)', 'UserController::getId','GET|POST');
 //$router->get('/getCustomer','AdminController::getCustomer');
 

@@ -32,7 +32,10 @@ class UserController extends Controller {
 
    
     public function website(){
-        $data = $this->User_model->showMenu();
+        $data = array(
+           'menu' => $this->User_model->showMenu(),
+           'product' => $this->User_model->showProduct(),
+        );
         return $this->call->view('website',$data);
     }
     
@@ -50,11 +53,11 @@ class UserController extends Controller {
                     if($result && $result2){
                         $_SESSION['email'] = $email;
                         $_SESSION['loggedin'] = 1;
-                        return $this->call->view('website');
-                        //return $this->call->view('home',$data);
+                       redirect('/website');
                     }
                     else{
-                        $this->call->view('userlogin');
+                        $data['error_message']= 'Invalid email or password';
+                        $this->call->view('userlogin',$data);
                     }
                     }
                 }
@@ -73,16 +76,22 @@ class UserController extends Controller {
                                   ->name('email')->required()
                                   ->name('password')->required();
             if($this->form_validation->run()){
-                $this->User_model->insert( $username, $email, $this->io->post('password'), $this->io->post('verified'),$verificationCode);
-                
-                $this->call->view('useregister');
-                $this->call->library('email');
-                $this->email->sender('ashlyomanada@gmail.com', 'Ashly Omanada');
-                $this->email->recipient( $email);
-                $this->email->subject('Account Verification');
-                $this->email->email_content('<a href="http://localhost/LavalustProject/verify/' . $verificationCode . '" >verify</a>', 'html');
-                $this->email->send();
-                echo 'Email sent';
+                $verifiedEmail = $this->User_model->verifyEmail($email);
+                if(!$verifiedEmail){
+                    $this->User_model->insert( $username, $email, $this->io->post('password'), $this->io->post('verified'),$verificationCode);
+                    $this->call->view('useregister');
+                    $this->call->library('email');
+                    $this->email->sender('ashlyomanada@gmail.com', 'Ashly Omanada');
+                    $this->email->recipient( $email);
+                    $this->email->subject('Account Verification');
+                    $this->email->email_content('<a href="http://localhost/LavalustProject/verify/' . $verificationCode . '" >verify</a>', 'html');
+                    $this->email->send();
+                    echo 'Email sent';
+                }
+                else{
+                    $data['error_registered'] = 'Email already exist';
+                    return $this->call->view('useregister',$data);
+                }
             }
         }
     }
@@ -113,6 +122,8 @@ class UserController extends Controller {
             $email = $this->io->post('email');
             $contact = $this->io->post('contact');
             $table = $this->io->post('table');
+            $menu = $this->io->post('menu');
+            $product = $this->io->post('product');
             $address = $this->io->post('address');
             $date = $this->io->post('date');
             $noPeople = $this->io->post('people');
@@ -125,7 +136,7 @@ class UserController extends Controller {
                 ->name('date')->required()
                 ->name('people')->required();
                 if($this->form_validation->run()){
-                $this->User_model->insertReserve($id, $username, $email,$contact,$table ,$address,$date,$noPeople);
+                $this->User_model->insertReserve($id, $username, $email,$contact,$table,$menu,$product ,$address,$date,$noPeople);
                 redirect('/showHistory');
                 } else{
                    
@@ -226,9 +237,6 @@ class UserController extends Controller {
     }
   
     public function updateMenu() {
-        $id = $this->io->post('id');
-        $name = $this->io->post('name');
-        $price = $this->io->post('price');
         if(isset($_FILES["userfile"])){
             $this->call->library('upload', $_FILES["userfile"]);
             $this->upload
@@ -237,6 +245,9 @@ class UserController extends Controller {
                 ->is_image()
                 ->encrypt_name();
             if($this->upload->do_upload()) {
+                $id = $this->io->post('id');
+                $name = $this->io->post('name');
+                $price = $this->io->post('price');
                 $data['filename'] = $this->upload->get_filename();
                 $this->User_model->editMenu($id,$name,$price,$data['filename']  );
                 redirect('/getMenu');
@@ -245,9 +256,8 @@ class UserController extends Controller {
             }
         }
         else{
-            redirect('/getMenu');
+            //redirect('/getMenu');
         }
-		
 	}
     
     /*

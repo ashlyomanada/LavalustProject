@@ -43,18 +43,18 @@
             <p class="form-title">Reserve Now</p>
             <div class="input-container">
                 <input type="text" placeholder="Enter Full Name" name="username" value="<?=$datas['username'] ?>"
-                    require>
+                    required>
                 <span>
                 </span>
-                <input type="email" placeholder="Enter email" value="<?=$datas['email'] ?>" name="email" require>
+                <input type="email" placeholder="Enter email" value="<?=$datas['email'] ?>" name="email" required>
                 <span>
                 </span>
             </div>
             <div class="input-container">
-                <input type="number" placeholder="Contact" name="contact" require>
+                <input type="number" placeholder="Contact" name="contact" required min="11">
                 <span>
                 </span>
-                <select name="table" id="inputTable" placeholder="Table">
+                <select name="table" id="inputTable" placeholder="Table" required>
                     <option value="Table 1">Table 1</option>
                     <option value="Table 2">Table 2</option>
                     <option value="Table 3">Table 3</option>
@@ -66,15 +66,29 @@
                 </span>
             </div>
             <div class="input-container">
-                <textarea name="address" id="address" cols="75" rows="4" placeholder="Address"></textarea>
+                <textarea name="address" id="address" cols="75" rows="2" placeholder="Address" required></textarea>
                 <span>
                 </span>
             </div>
             <div class="input-container">
-                <input type="datetime-local" name="date" id="">
+                <select name="menu" id="inputTable" placeholder="Menu" required>
+                    <option value="No Choice">No Choice</option>
+                    <option value="Menu 1">Menu 1</option>
+                </select>
                 <span>
                 </span>
-                <input type="number" placeholder="No. People" name="people" min="1" require>
+                <select name="product" id="inputTable" placeholder="Product" required>
+                    <option value="No Choice">No Choice</option>
+                    <option value="Product 1">Product 1</option>
+                </select>
+                <span>
+                </span>
+            </div>
+            <div class="input-container">
+                <input type="datetime-local" name="date" id="" required>
+                <span>
+                </span>
+                <input type="number" placeholder="No. People" name="people" min="1" required>
                 <span>
                 </span>
             </div>
